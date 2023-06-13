@@ -1,0 +1,65 @@
+{% extends "base.html.twig" %}
+
+
+{% block title %}Article{% endblock %}
+
+
+{% block body %}
+
+<section class="row article">
+    
+    
+        <article class="col-md-8 mx-auto text-center bg-secondary text-dark border border-dark mb-3 p-3 mt-3 mr-1">
+            <h2>{{article.title}}</h2>
+            <div class="metadata">Ecrit le {{article.createdAt|date('d/m/Y à H:i:s')}} dans la catégorie {{article.category.title}} </div>
+            <div class="content">
+                <img class="img-fluid" src="{{article.image}}" alt="">
+                <div class="py-3 px-5" style="text-align: justify;">{{ article.content}}</div>
+                
+            </div>
+            <a href="{{ path('edit_article', {id: article.id})}}" class="btn btn-warning">modifier</a>
+        </article>
+ 
+    </section>
+
+    <div class="contain my-3">
+        {% if app.user %}
+            <h2 class="text-center">ajouter un commentaire</h2>
+
+            {{form_start(commentForm)}}
+
+                {{form_row(commentForm.content)}}
+                <button type="submit" class="btn btn-info">envoyer</button>
+            {{form_end(commentForm)}}
+        {% else %}
+            <p class="text-center h5">Pour ajouter un commentaire, <a href="{{ path('app_login') }}"></a></p>
+        {% endif %}
+    </div>
+
+    <div class="container my-4">
+        <h2 class="text-center">Commentaires</h2>
+    
+        <section>
+            <table class="table table-light">
+                <thead>
+                    <tr>
+                        <th class="col-md-3">User/Time</th>
+                        <th class="col-md-9">Comments</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for comment in article.comments %}
+
+                    <tr>
+                        <td> {{comment.user.userName}} <br> <small>{{comment.createdAt|date('d/m/Y à H:i:s')}}</small></td>
+                        <td>{{comment.content}}</td>
+                    </tr>
+                
+                    {% endfor %}
+                </tbody>
+            </table>
+        </section>
+    
+    </div>
+
+{% endblock %}
